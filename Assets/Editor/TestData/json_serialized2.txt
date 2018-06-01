@@ -1,0 +1,52 @@
+{
+    "tests": [
+        {
+            "doubleData": 196.24789428710938,
+            "floatData": 196.24789428710938,
+            "floatConvertedData": 196.24789428710938,
+            "floatTruncatedData": 196.24789428710938,
+            "floatTruncatedFromStringData": 196.2480010986328,
+            "doubleTruncatedData": 196.2479
+        },
+        {
+            "doubleData": 0.10000000149011612,
+            "floatData": 0.10000000149011612,
+            "floatConvertedData": 0.10000000149011612,
+            "floatTruncatedData": 0.10000000149011612,
+            "floatTruncatedFromStringData": 0.10000000149011612,
+            "doubleTruncatedData": 0.1
+        },
+        {
+            "doubleData": 13.600000381469727,
+            "floatData": 13.600000381469727,
+            "floatConvertedData": 13.600000381469727,
+            "floatTruncatedData": 13.600000381469727,
+            "floatTruncatedFromStringData": 13.600000381469727,
+            "doubleTruncatedData": 13.6
+        },
+        {
+            "doubleData": 196.2479,
+            "floatData": 196.24789428710938,
+            "floatConvertedData": 196.24789428710938,
+            "floatTruncatedData": 196.24789428710938,
+            "floatTruncatedFromStringData": 196.2480010986328,
+            "doubleTruncatedData": 196.2479
+        },
+        {
+            "doubleData": 0.1,
+            "floatData": 0.10000000149011612,
+            "floatConvertedData": 0.10000000149011612,
+            "floatTruncatedData": 0.10000000149011612,
+            "floatTruncatedFromStringData": 0.10000000149011612,
+            "doubleTruncatedData": 0.1
+        },
+        {
+            "doubleData": 13.6,
+            "floatData": 13.600000381469727,
+            "floatConvertedData": 13.600000381469727,
+            "floatTruncatedData": 13.600000381469727,
+            "floatTruncatedFromStringData": 13.600000381469727,
+            "doubleTruncatedData": 13.6
+        }
+    ]
+}
