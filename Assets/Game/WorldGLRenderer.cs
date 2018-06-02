@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UniVer
 {
-    public class WorldGLRenderer : MonoBehaviour
+    public class WorldGLRenderer : WorldRenderer
     {
         private InteractiveModel model;
         private World world;
@@ -29,7 +29,7 @@ namespace UniVer
             }
         }
 
-        public void BindModel(InteractiveModel model)
+        public override void BindModel(InteractiveModel model)
         {
             this.model = model;
             this.world = model.world;

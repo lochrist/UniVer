@@ -226,3 +226,4 @@ MonoBehaviour:
   height: 200
   live: 0
   gravity: 0
+  worldRenderer: {fileID: 1194648954}

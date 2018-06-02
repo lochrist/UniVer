@@ -5,6 +5,11 @@ using UnityEngine;
 
 namespace UniVer
 {
+    public abstract class WorldRenderer : MonoBehaviour
+    {
+        public abstract void BindModel(InteractiveModel model);
+    }
+
     public class InteractiveModel
     {
         public InteractiveModel(World world)
@@ -23,6 +28,7 @@ namespace UniVer
         public float height = 200f;
         public bool live;
         public bool gravity;
+        public WorldRenderer worldRenderer;
 
         Camera mainCamera;
         InteractiveModel model;
@@ -41,7 +47,7 @@ namespace UniVer
                 // height = 9f
             };
             model = new InteractiveModel(world);
-            GetComponent<WorldGLRenderer>().BindModel(model);
+            worldRenderer.BindModel(model);
             mainCamera = GetComponent<Camera>();
 
             Init(world);
