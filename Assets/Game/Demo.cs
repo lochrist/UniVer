@@ -26,8 +26,8 @@ namespace UniVer
     {
         public float width = 200f;
         public float height = 200f;
-        public bool live;
-        public bool gravity;
+        public bool live = true;
+        public bool gravity = true;
         public WorldRenderer worldRenderer;
 
         Camera mainCamera;
@@ -55,13 +55,29 @@ namespace UniVer
 
         void Init(World world)
         {
-            CodePenDemo(world);
+            SingleRectFalling2(world);
         }
 
-        void SingleRect(World world)
+        void SingleRectFalling(World world)
         {
             // world.CreateRectangle(0, 2, 1, 2, 1);
             world.CreateRectangle(0, 0, 10, 10, 1);
+        }
+
+        void SingleRectFalling2(World world)
+        {
+            // world.CreateRectangle(0, 2, 1, 2, 1);
+            World.gravity = -0.2f;
+            World.frictionFloor = 0.8f;
+            World.friction = 1.0f;
+            world.CreateRectangle(100, 100, 10, 10, 1);
+        }
+
+        void RectOnFloor(World world)
+        {
+            // world.CreateRectangle(0, 2, 1, 2, 1);
+            World.gravity = -0.3f;
+            world.CreateRectangle(100, 189, 10, 10, 1);
         }
 
         void TwoBodies(World world)
@@ -152,6 +168,7 @@ namespace UniVer
 
         public void OnGUI()
         {
+            // Debug.Log("OnGui");
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Step"))
             {
@@ -165,11 +182,33 @@ namespace UniVer
                 Init(world);
             }
 
+            if (GUILayout.Button("Jump"))
+            {
+                world.bodies[0].vertices[0].position += new Vector2(20, -20);
+                /*
+                world.bodies[0].vertices[1].position += new Vector2(20, -20);
+                world.bodies[0].vertices[2].position += new Vector2(20, -20);
+                world.bodies[0].vertices[3].position += new Vector2(20, -20);
+                */
+            }
+
             GUILayout.Label("Frame: " + world.frame);
             GUILayout.EndHorizontal();
+
+            DragHandle();
         }
 
         private void Update()
+        {
+            // Debug.Log("Update");
+        }
+
+        private void OnPostRender()
+        {
+            // Debug.Log("OnPostRender");
+        }
+
+        private void DragHandle()
         {
             model.dragPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             model.dragPosition.y = height - model.dragPosition.y;
@@ -199,6 +238,7 @@ namespace UniVer
         {
             if (live)
             {
+                // Debug.Log("FixedUpdate");
                 World.gravity = gravity ? 0.1f : 0.0f;
                 world.Step(Time.deltaTime);
             }

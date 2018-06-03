@@ -64,7 +64,7 @@ namespace UniVer
 
             var content = File.ReadAllText(TestUtils.folder + "/json_serialized_from_double.txt");
             var test2 = JsonUtility.FromJson<JsonTestDatas>(content);
-
+            Debug.Log(test2);
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace UniVer
 
             var content = File.ReadAllText(TestUtils.folder + "/json_serialized_from_single.txt");
             var test2 = JsonUtility.FromJson<JsonTestDatas>(content);
-
+            Debug.Log(test2);
         }
 
         [Test]

@@ -224,6 +224,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 200
   height: 200
-  live: 0
-  gravity: 0
+  live: 1
+  gravity: 1
   worldRenderer: {fileID: 1194648954}

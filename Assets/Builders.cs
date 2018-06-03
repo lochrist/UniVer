@@ -67,6 +67,102 @@ namespace UniVer
             world.constraints.Add(constraint);
             return constraint;
         }
-    }
 
+        public static Constraint Pin(this World world, Body body, int vertexIndex)
+        {
+            var c = new PinConstraint(body.vertices[vertexIndex], body.vertices[vertexIndex].position);
+            world.constraints.Add(c);
+            return c;
+        }
+
+        public static Body Point(this World world, Vertex pos)
+        {
+            var b = new Body(new[] { pos }, new Constraint[0], 0.1f);
+            world.AddBody(b);
+            return b;
+        }
+
+        public static Body LineSegments(this World world, Vertex[] vertices, float stiffness)
+        {
+            var constraints = new List<Constraint>();
+            for (var i = 0; i < vertices.Length; ++i)
+            {
+                if (i > 0)
+                    constraints.Add(new SpringConstraint(vertices[0], vertices[i - 1], stiffness));
+            }
+
+            var b = new Body(vertices, constraints.ToArray(), 0.1f);
+            world.AddBody(b);
+            return b;
+        }
+
+        public static Body Cloth(this World world, Vector2 origin, float width, float height, int segments, int pinMod, float stiffness)
+        {
+            var xStride = width / segments;
+            var yStride = height / segments;
+
+            var vertices = new List<Vertex>();
+            var constraints = new List<Constraint>();
+
+            for (var y = 0; y < segments; ++y)
+            {
+                for (var x = 0; x < segments; ++x)
+                {
+                    var posX = origin.x + x * xStride - width / 2 + xStride / 2;
+                    var posY = origin.y + y * yStride - height / 2 + yStride / 2;
+                    vertices.Add(new Vertex(posX, posY));
+
+                    if (x > 0)
+                    {
+                        constraints.Add(new SpringConstraint(vertices[y * segments + x], vertices[y * segments + x - 1], stiffness));
+                    }
+
+                    if (y > 0)
+                    {
+                        constraints.Add(new SpringConstraint(vertices[y * segments + x], vertices[(y - 1) * segments + x], stiffness));
+                    }
+                }
+            }
+
+            var b = new Body(vertices.ToArray(), constraints.ToArray(), 0.1f);
+            world.AddBody(b);
+
+            for (var x = 0; x < segments; ++x)
+            {
+                if (x % pinMod == 0)
+                    world.Pin(b, x);
+            }
+
+            return b;
+        }
+
+        public static Body Tire(this World world, Vector2 origin, float radius, int segments, float spokeStiffness, float treadStiffness)
+        {
+            var stride = (2 * Mathf.PI) / segments;
+            var vertices = new List<Vertex>();
+            var constraints = new List<Constraint>();
+
+            for (var i = 0; i < segments; ++i)
+            {
+                var theta = i * stride;
+                vertices.Add(new Vertex(origin.x + Mathf.Cos(theta) * radius, origin.y + Mathf.Sin(theta) * radius));
+            }
+
+            // TODO Handle drawing
+            var center = new Vertex(origin);
+            vertices.Add(center);
+
+            // constraints
+            for (var i = 0; i < segments; ++i)
+            {
+                constraints.Add(new SpringConstraint(vertices[i], vertices[(i + 1) % segments], treadStiffness));
+                constraints.Add(new SpringConstraint(vertices[i], center, spokeStiffness));
+                constraints.Add(new SpringConstraint(vertices[i], vertices[(i + 5) % segments], treadStiffness));
+            }
+
+            var b = new Body(vertices.ToArray(), constraints.ToArray(), 0.1f);
+            world.AddBody(b);
+            return b;
+        }
+    }
 }

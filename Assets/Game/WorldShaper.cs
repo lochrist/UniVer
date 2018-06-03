@@ -14,7 +14,7 @@ namespace UniVer {
         private BitmapFont mBitmapFont;
         private Rect mParentRect;
         private float mRectangleHeight = 80;
-        private float mRectangleWidth;
+        private float mRectangleWidth = 0;
         private float mRectangleY;
         private float mRectangleX = 10;
         private int mNumSamples = 8;
@@ -297,12 +297,22 @@ namespace UniVer {
         /// </summary>
         private void OnGUI()
         {
+            
+
+            
+            
+        }
+
+        public void OnRenderObject()
+        {
+        }
+
+        private void RenderWorld()
+        {
             // Set the 0,0 at the top-left corner of this panel
             mParentRect = Drawing2D.GetWorldRect(this.transform as RectTransform);
             Drawing2D.SetParentBounds(mParentRect);
 
-
-            
             if (Event.current.type == EventType.Repaint)
             {
                 /*
@@ -329,9 +339,6 @@ namespace UniVer {
             }
 
             Drawing2D.ClearParentBounds();
-
-            
-            
         }
 
         private void DrawWorldBounds()

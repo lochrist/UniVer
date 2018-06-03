@@ -5,6 +5,12 @@ namespace UniVer
 {
     public class Vertex
     {
+        public Vertex(Vector2 pos)
+        {
+            position = pos;
+            oldPosition = position;
+        }
+
         public Vertex(float x, float y)
         {
             position.x = x;

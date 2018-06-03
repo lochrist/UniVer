@@ -17,8 +17,8 @@ namespace UniVer
     {
         public static float gravity = 0.1f;
         public static int numIterations = 5;
-        public static float friction = 0.2f;
-        public static float frictionFloor = 0.1f;
+        public static float friction = 0.2f; // 0.99f
+        public static float frictionFloor = 0.1f; // 0.8f
         public static float viscosity = 1.0f;
         public static float forceDrag = 5f;
 
@@ -78,7 +78,17 @@ namespace UniVer
             }
 
             if (recorder != null)
+            {
+                recorder.BeginSolvingStep("boundsChecking", RecordinInfo.BodyVertices());
+            }
+
+            BoundsChecking();
+
+            if (recorder != null)
+            {
+                recorder.EndSolvingStep();
                 recorder.EndFrame();
+            }
             ++frame;
         }
 
@@ -119,6 +129,32 @@ namespace UniVer
 
         private void Integrate(float dt)
         {
+            for (var i = 0; i < vertices.Count; ++i)
+            {
+                var v = vertices[i];
+                var velocity = (v.position - v.oldPosition) * friction;
+
+                // ground friction
+                if (v.position.y >= height - 1 && velocity.sqrMagnitude > 0.000001)
+                {
+                    var m = velocity.magnitude;
+                    velocity /= m;
+                    velocity *= (m * frictionFloor);
+                }
+
+                // save last good state
+                v.oldPosition = v.position;
+
+                // gravity
+                v.position.y += gravity;
+
+                // inertia  
+                v.position += velocity;
+            }
+        }
+
+        private void IntegrateOld(float dt)
+        {
             for(var i = 0; i < vertices.Count; ++i)
             {
                 var v = vertices[i];
@@ -149,6 +185,22 @@ namespace UniVer
                     v.position.x = 0;
                 else if (v.position.x > width)
                     v.position.x = width;
+            }
+        }
+
+        private void BoundsChecking()
+        {
+            for (var i = 0; i < vertices.Count; ++i)
+            {
+                var v = vertices[i];
+                if (v.position.y > height - 1)
+                    v.position.y = height - 1;
+
+                if (v.position.x < 0)
+                    v.position.x = 0;
+
+                if (v.position.x > width - 1)
+                    v.position.x = width - 1;
             }
         }
 

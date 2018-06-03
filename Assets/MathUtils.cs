@@ -17,6 +17,19 @@ namespace UniVer
             return new Vector2(Round(value.x, digits), Round(value.y, digits));
         }
 
+        public static float Angle(Vector2 v0, Vector2 v1)
+        {
+            return Mathf.Atan2(
+                v0.x * v1.y - v0.y * v1.x,
+                v0.x * v1.x + v0.y * v1.y
+                );
+        }
+
+        public static float Angle2(Vector2 v0, Vector2 left, Vector2 right)
+        {
+            return Angle(left - v0, right - v0);
+        }
+
         public static float SquareDistance(Vector2 v0, Vector2 v1)
         {
             var dx = v0.x - v1.x;
@@ -43,6 +56,15 @@ namespace UniVer
         public static Vector2 Perp(Vector2 v0)
         {
             return new Vector2(-v0.y, v0.x);
+        }
+
+        public static Vector2 Rotate(Vector2 v, Vector2 origin, float angle)
+        {
+            var d = v - origin;
+            return new Vector2(
+                d.x * Mathf.Cos(angle) - d.y * Mathf.Sin(angle) + origin.x,
+                d.x * Mathf.Sin(angle) + d.y * Mathf.Cos(angle) + origin.y
+                );
         }
     }
 }

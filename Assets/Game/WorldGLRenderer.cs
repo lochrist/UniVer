@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using GraphicDNA;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace UniVer
@@ -10,6 +12,11 @@ namespace UniVer
         private World world;
 
         static Material lineMaterial;
+        private Color ToColor(int r, int g, int b, int a = 255)
+        {
+            return new UnityEngine.Color((float)r / 255f, (float)g / 255f, (float)b / 255f, (float)a / 255f);
+        }
+
         static void CreateLineMaterial()
         {
             if (!lineMaterial)
@@ -37,6 +44,24 @@ namespace UniVer
 
         // Will be called after all regular rendering is done
         public void OnRenderObject()
+        {
+            RenderWorldGL();
+            // RenderWorldShaper();
+        }
+
+        private void RenderWorldShaper()
+        {
+            Drawing2D.ScreenWidth = world.width;
+            Drawing2D.ScreenHeight = world.height;
+            Drawing2D.DrawRect(new Rect(0, 0, world.width, world.height), ToColor(0, 220, 20));
+
+            foreach (var body in world.bodies)
+            {
+                Drawing2D.DrawPolygon(body.vertices.Select(v => v.position).ToArray(), ToColor(220, 20, 20));
+            }
+        }
+
+        private void RenderWorldGL()
         {
             CreateLineMaterial();
             // Apply the line material
