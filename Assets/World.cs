@@ -31,6 +31,7 @@ namespace UniVer
         public List<Body> bodies = new List<Body>();
         public List<Vertex> vertices = new List<Vertex>();
         public List<Constraint> constraints = new List<Constraint>();
+        public bool enableCollision = true;
 
         public World()
         {
@@ -69,12 +70,14 @@ namespace UniVer
                 if (recorder != null)
                     recorder.EndSolvingStep();
 
-                if (recorder != null)
-                    recorder.BeginSolvingStep("collision_" + i, RecordinInfo.BodyVertices());
-                CollisionDetection(dt);
-
-                if (recorder != null)
-                    recorder.EndSolvingStep();
+                if (enableCollision)
+                {
+                    if (recorder != null)
+                        recorder.BeginSolvingStep("collision_" + i, RecordinInfo.BodyVertices());
+                    CollisionDetection(dt);
+                    if (recorder != null)
+                        recorder.EndSolvingStep();
+                }
             }
 
             if (recorder != null)
