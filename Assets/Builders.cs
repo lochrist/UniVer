@@ -88,7 +88,7 @@ namespace UniVer
             for (var i = 0; i < vertices.Length; ++i)
             {
                 if (i > 0)
-                    constraints.Add(new SpringConstraint(vertices[0], vertices[i - 1], stiffness));
+                    constraints.Add(new SpringConstraint(vertices[i], vertices[i - 1], stiffness));
             }
 
             var b = new Body(vertices, constraints.ToArray(), 0.1f);

@@ -52,7 +52,7 @@ namespace UniVer
             if (recorder != null)
                 recorder.EndSolvingStep();
 
-            var stepCoef = 1 / numIterations;
+            var stepCoef = 1.0f / numIterations;
 
             for (var i = 0; i < numIterations; ++i)
             {

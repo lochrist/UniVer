@@ -61,7 +61,7 @@ namespace UniVer
             this.v0 = v0;
             this.v1 = v1;
             this.stiffness = stiffness;
-            distance = distance == 0.0f ? (v0.position - v1.position).magnitude : distance;
+            this.distance = distance == 0.0f ? (v0.position - v1.position).magnitude : distance;
         }
 
         public void Solve(float dt, float stepCoef)

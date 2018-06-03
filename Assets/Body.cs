@@ -19,6 +19,11 @@ namespace UniVer
         }
         public Vector2 oldPosition;
         public Vector2 position;
+
+        public override string ToString()
+        {
+            return position.ToString();
+        }
     }
 
     public class Body

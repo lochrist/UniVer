@@ -9,7 +9,7 @@ namespace UniVer
     {
         protected override void Init(World world)
         {
-            SingleRectFalling2(world);
+            LineSegments(world);
         }
 
         protected override World CreateWorld()
@@ -39,6 +39,19 @@ namespace UniVer
             World.frictionFloor = 0.8f;
             World.friction = 1.0f;
             world.CreateRectangle(100, 100, 10, 10, 1);
+        }
+
+        void LineSegments(World world)
+        {
+            var segment = world.LineSegments(new[] {
+                new Vertex(20, 10),
+                new Vertex(40, 10),
+                new Vertex(60, 10),
+                new Vertex(80, 10),
+                new Vertex(100, 10) }, 1f);
+
+            world.Pin(segment, 0);
+            world.Pin(segment, 4);
         }
     }
 }
