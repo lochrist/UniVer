@@ -37,6 +37,7 @@ namespace UniVer
         public float max = 0f;
         public float mass = 1.0f;
         public int id = idPool++;
+        public bool isClosed = true;
 
         public static int idPool = 0;
 

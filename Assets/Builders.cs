@@ -87,6 +87,7 @@ namespace UniVer
         public static Body Point(this World world, Vertex pos)
         {
             var b = new Body(new[] { pos }, new Constraint[0], 0.1f);
+            b.isClosed = false;
             world.AddBody(b);
             return b;
         }
@@ -101,6 +102,7 @@ namespace UniVer
             }
 
             var b = new Body(vertices, constraints.ToArray(), 0.1f);
+            b.isClosed = false;
             world.AddBody(b);
             return b;
         }

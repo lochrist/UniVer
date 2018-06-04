@@ -8,6 +8,7 @@ namespace UniVer
     public class DemoSpring : Demo
     {
         private Collision.ClosestInfo dragInfo;
+        private DragConstraint dragConstraint;
 
         protected override void Init(World world)
         {
@@ -25,6 +26,9 @@ namespace UniVer
             World.gravity = -0.2f;
             World.frictionFloor = 0.8f;
             World.friction = 1.0f;
+
+            dragConstraint = new DragConstraint();
+            w.constraints.Add(dragConstraint);
             return w;
         }
 
@@ -45,23 +49,18 @@ namespace UniVer
                 if (dragInfo.body != null)
                 {
                     model.draggedBody = dragInfo.body;
+                    dragConstraint.Activate(dragInfo);
                 }
             }
             else if (Input.GetMouseButton(0) && model.draggedBody != null)
             {
-                if (dragInfo.pin != null)
-                {
-                    dragInfo.pin.position = model.dragPosition;
-                }
-                else
-                {
-                    dragInfo.v.position = model.dragPosition;
-                }
+                dragConstraint.dragPosition = model.dragPosition;
             }
             else if (Input.GetMouseButtonUp(0) && model.draggedBody != null)
             {
                 model.draggedBody = null;
                 model.draggedVertex = null;
+                dragConstraint.Deactivate();
             }
         }
 

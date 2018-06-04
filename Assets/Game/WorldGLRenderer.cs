@@ -111,13 +111,14 @@ namespace UniVer
                 GL.Vertex3(v.position.x, world.height - v.position.y, 0);
             }
 
-            GL.Vertex3(body.vertices[0].position.x, world.height - body.vertices[0].position.y, 0);
+            if (body.isClosed)
+                GL.Vertex3(body.vertices[0].position.x, world.height - body.vertices[0].position.y, 0);
             GL.End();
         }
 
         private void DrawDragConstraint()
         {
-            if (model.draggedBody == null || model.draggedVertex == null || model.dragPosition == null)
+            if (model.draggedBody == null || model.draggedVertex == null)
                 return;
 
             GL.Begin(GL.LINE_STRIP);

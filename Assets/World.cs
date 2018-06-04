@@ -39,59 +39,39 @@ namespace UniVer
 
         public void Step(float dt)
         {
-            if (recorder != null)
-            {
-                recorder.BeginFrame(dt);
-                recorder.BeginSolvingStep("beforeIntegrate", RecordinInfo.All());
-                recorder.EndSolvingStep();
-                recorder.BeginSolvingStep("integrate", RecordinInfo.BodyVertices());
-            }
+            recorder?.BeginFrame(dt);
 
+            recorder?.BeginSolvingStep("beforeIntegrate", RecordinInfo.All());
+            recorder?.EndSolvingStep();
+            recorder?.BeginSolvingStep("integrate", RecordinInfo.BodyVertices());
             Integrate(dt);
-
-            if (recorder != null)
-                recorder.EndSolvingStep();
-
+            recorder?.EndSolvingStep();
+            
             var stepCoef = 1.0f / numIterations;
 
             for (var i = 0; i < numIterations; ++i)
             {
-                if (recorder != null)
-                    recorder.BeginSolvingStep("constrain_solve_" + i, RecordinInfo.BodyVertices());
+                recorder?.BeginSolvingStep("constrain_solve_" + i, RecordinInfo.BodyVertices());
                 Solve(dt, stepCoef);
+                recorder?.EndSolvingStep();
 
-                if (recorder != null)
-                    recorder.EndSolvingStep();
-
-                if (recorder != null)
-                    recorder.BeginSolvingStep("boundingbox_" + i, RecordinInfo.BodyData());
+                recorder?.BeginSolvingStep("boundingbox_" + i, RecordinInfo.BodyData());
                 UpdateBoundingBox(dt);
-
-                if (recorder != null)
-                    recorder.EndSolvingStep();
+                recorder?.EndSolvingStep();
 
                 if (enableCollision)
                 {
-                    if (recorder != null)
-                        recorder.BeginSolvingStep("collision_" + i, RecordinInfo.BodyVertices());
+                    recorder?.BeginSolvingStep("collision_" + i, RecordinInfo.BodyVertices());
                     CollisionDetection(dt);
-                    if (recorder != null)
-                        recorder.EndSolvingStep();
+                    recorder?.EndSolvingStep();
                 }
             }
 
-            if (recorder != null)
-            {
-                recorder.BeginSolvingStep("boundsChecking", RecordinInfo.BodyVertices());
-            }
-
+            recorder?.BeginSolvingStep("boundsChecking", RecordinInfo.BodyVertices());
             BoundsChecking();
+            recorder?.EndSolvingStep();
 
-            if (recorder != null)
-            {
-                recorder.EndSolvingStep();
-                recorder.EndFrame();
-            }
+            recorder?.EndFrame();
             ++frame;
         }
 

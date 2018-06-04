@@ -40,7 +40,7 @@ namespace UniVer
 
             dx *= delta;
             dy *= delta;
-            
+
             v1.position.x += dx;
             v1.position.y += dy;
 
@@ -124,6 +124,37 @@ namespace UniVer
             c.position = MathUtils.Rotate(c.position, b.position, -diff);
             b.position = MathUtils.Rotate(b.position, a.position, diff);
             b.position = MathUtils.Rotate(b.position, c.position, -diff);
+        }
+    }
+
+    public class DragConstraint : Constraint
+    {
+        Collision.ClosestInfo info = new Collision.ClosestInfo();
+        public Vector2 dragPosition;
+
+        public void Activate(Collision.ClosestInfo info)
+        {
+            this.info = info;
+        }
+
+        public void Deactivate()
+        {
+            info = new Collision.ClosestInfo();
+        }
+
+        public void Solve(float dt, float stepCoef)
+        {
+            if (info.body == null)
+                return;
+
+            if (info.pin != null)
+            {
+                info.pin.position = dragPosition;
+            }
+            else if (info.v != null)
+            {
+                info.v.position = dragPosition;
+            }
         }
     }
 }
