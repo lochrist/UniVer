@@ -227,17 +227,18 @@ namespace UniVer
             public PinConstraint pin;
         }
 
-        public static ClosestInfo GetClosestVertex(World world, Vector2 p)
+        public static ClosestInfo GetClosestVertex(World world, Vector2 p, float selectionRadius = 3f)
         {
             var minDistance = float.MaxValue;
             var info = new ClosestInfo();
+            var selection2 = selectionRadius * selectionRadius;
             for (var i = 0; i < world.bodies.Count; ++i)
             {
                 var b = world.bodies[i];
                 for (var vIndex = 0; vIndex < b.vertices.Length; ++vIndex)
                 {
                     var dist = MathUtils.SquareDistance(b.vertices[vIndex].position, p);
-                    if (dist < minDistance)
+                    if (dist< selection2 && dist < minDistance)
                     {
                         minDistance = dist;
                         info.v = b.vertices[vIndex];
