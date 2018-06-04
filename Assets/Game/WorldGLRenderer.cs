@@ -117,7 +117,7 @@ namespace UniVer
 
         private void DrawDragConstraint()
         {
-            if (model.draggedBody == null)
+            if (model.draggedBody == null || model.draggedVertex == null || model.dragPosition == null)
                 return;
 
             GL.Begin(GL.LINE_STRIP);

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -68,11 +68,20 @@ namespace UniVer
             return constraint;
         }
 
-        public static Constraint Pin(this World world, Body body, int vertexIndex)
+        public static List<Constraint> Pins(this World world, Body body, params int[] vertexIndices)
         {
-            var c = new PinConstraint(body.vertices[vertexIndex], body.vertices[vertexIndex].position);
-            world.constraints.Add(c);
-            return c;
+            var constraints = new List<Constraint>();
+            for(var i = 0; i < vertexIndices.Length; ++i)
+            {
+                var vertexIndex = vertexIndices[i];
+                var c = new PinConstraint(body.vertices[vertexIndex], body.vertices[vertexIndex].position);
+                constraints.Add(c);
+            }
+
+            body.constraints = body.constraints.Concat(constraints).ToArray();
+
+            world.constraints.AddRange(constraints);
+            return constraints;
         }
 
         public static Body Point(this World world, Vertex pos)
@@ -126,11 +135,10 @@ namespace UniVer
 
             var b = new Body(vertices.ToArray(), constraints.ToArray(), 0.1f);
             world.AddBody(b);
-
             for (var x = 0; x < segments; ++x)
             {
                 if (x % pinMod == 0)
-                    world.Pin(b, x);
+                    world.Pins(b, x);
             }
 
             return b;

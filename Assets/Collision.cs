@@ -219,6 +219,46 @@ namespace UniVer
             }
             return v;
         }
-    }
 
+        public struct ClosestInfo
+        {
+            public Vertex v;
+            public Body body;
+            public PinConstraint pin;
+        }
+
+        public static ClosestInfo GetClosestVertex(World world, Vector2 p)
+        {
+            var minDistance = float.MaxValue;
+            var info = new ClosestInfo();
+            for (var i = 0; i < world.bodies.Count; ++i)
+            {
+                var b = world.bodies[i];
+                for (var vIndex = 0; vIndex < b.vertices.Length; ++vIndex)
+                {
+                    var dist = MathUtils.SquareDistance(b.vertices[vIndex].position, p);
+                    if (dist < minDistance)
+                    {
+                        minDistance = dist;
+                        info.v = b.vertices[vIndex];
+                        info.body = b;
+                    }
+                }
+            }
+
+            if (info.body != null)
+            {
+                for (var i = 0; i < info.body.constraints.Length; ++i)
+                {
+                    var pin = info.body.constraints[i] as PinConstraint;
+                    if (pin != null && pin.v == info.v)
+                    {
+                        info.pin = pin;
+                    }
+                }
+            }
+
+            return info;
+        }
+    }
 }

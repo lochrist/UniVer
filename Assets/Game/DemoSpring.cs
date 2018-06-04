@@ -7,6 +7,8 @@ namespace UniVer
 {
     public class DemoSpring : Demo
     {
+        private Collision.ClosestInfo dragInfo;
+
         protected override void Init(World world)
         {
             LineSegments(world);
@@ -29,7 +31,38 @@ namespace UniVer
         public override void OnGUI()
         {
             base.OnGUI();
-            
+            DragHandle();
+        }
+
+        private void DragHandle()
+        {
+            model.dragPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            model.dragPosition.y = height - model.dragPosition.y;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                dragInfo = Collision.GetClosestVertex(world, model.dragPosition);
+                if (dragInfo.body != null)
+                {
+                    model.draggedBody = dragInfo.body;
+                }
+            }
+            else if (Input.GetMouseButton(0) && model.draggedBody != null)
+            {
+                if (dragInfo.pin != null)
+                {
+                    dragInfo.pin.position = model.dragPosition;
+                }
+                else
+                {
+                    dragInfo.v.position = model.dragPosition;
+                }
+            }
+            else if (Input.GetMouseButtonUp(0) && model.draggedBody != null)
+            {
+                model.draggedBody = null;
+                model.draggedVertex = null;
+            }
         }
 
         void SingleRectFalling2(World world)
@@ -50,8 +83,7 @@ namespace UniVer
                 new Vertex(80, 10),
                 new Vertex(100, 10) }, 1f);
 
-            world.Pin(segment, 0);
-            world.Pin(segment, 4);
+            world.Pins(segment, 0, 4);
         }
     }
 }
