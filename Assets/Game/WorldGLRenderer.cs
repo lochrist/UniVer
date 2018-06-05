@@ -1,4 +1,5 @@
 ﻿using GraphicDNA;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,9 @@ namespace UniVer
     {
         private InteractiveModel model;
         private World world;
+
+        private Dictionary<int, Action<Body>> bodyRenderers;
+        private Dictionary<int, Action<Constraint>> constraintRenderers;
 
         static Material lineMaterial;
         private Color ToColor(int r, int g, int b, int a = 255)
@@ -77,6 +81,9 @@ namespace UniVer
             foreach (var body in world.bodies)
                 DrawBody(body);
 
+            foreach (var c in world.globalConstraints)
+                DrawConstraint(c);
+
             DrawDragConstraint();
 
             GL.PopMatrix();
@@ -103,17 +110,19 @@ namespace UniVer
 
         private void DrawBody(Body body)
         {
-            GL.Begin(GL.LINE_STRIP);
-
-            GL.Color(new Color(255, 0, 0));
-            foreach (var v in body.vertices)
+            switch(body.tag)
             {
-                GL.Vertex3(v.position.x, world.height - v.position.y, 0);
-            }
+                case Tags.NormalBody:
+                    foreach (var c in body.constraints)
+                        DrawConstraint(c);
 
-            if (body.isClosed)
-                GL.Vertex3(body.vertices[0].position.x, world.height - body.vertices[0].position.y, 0);
-            GL.End();
+                    foreach (var v in body.vertices)
+                        DrawVertex(v);
+
+                    break;
+                case Tags.Cloth:
+                    break;
+            }
         }
 
         private void DrawDragConstraint()
@@ -123,10 +132,51 @@ namespace UniVer
 
             GL.Begin(GL.LINE_STRIP);
 
-            GL.Color(new Color(0, 255, 0));
+            GL.Color(Color.green);
 
             GL.Vertex3(model.draggedVertex.position.x, world.height - model.draggedVertex.position.y, 0);
             GL.Vertex3(model.dragPosition.x, world.height - model.dragPosition.y, 0);
+
+            GL.End();
+        }
+
+        private void DrawConstraint(Constraint c)
+        {
+            switch (c.tag)
+            {
+                case Tags.DistanceConstraint:
+                    var distance = c as DistanceConstraint;
+                    DrawLine(distance.v0.position, distance.v1.position, Color.magenta);
+                    break;
+                case Tags.SpringConstraint:
+                    var spring = c as SpringConstraint;
+                    DrawLine(spring.v0.position, spring.v1.position, Color.magenta);
+                    break;
+                case Tags.DragConstraint:
+                    break;
+                case Tags.PinConstraint:
+                    break;
+                case Tags.AngleConstraint:
+                    break;
+            }
+        }
+
+        private void DrawVertex(Vertex v)
+        {
+
+        }
+
+        private void GLVertex(float x, float y)
+        {
+            GL.Vertex3(x, world.height - y, 0);
+        }
+
+        private void DrawLine(Vector2 v0, Vector2 v1, Color c)
+        {
+            GL.Begin(GL.LINES);
+            GL.Color(c);
+            GLVertex(v0.x, v0.y);
+            GLVertex(v1.x, v1.y);
 
             GL.End();
         }

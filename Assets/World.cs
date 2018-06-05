@@ -15,7 +15,7 @@ namespace UniVer
 
     public class World
     {
-        public static float gravity = 0.1f;
+        public static float gravity = -0.2f;
         public static int numIterations = 5;
         public static float friction = 0.2f; // 0.99f
         public static float frictionFloor = 0.1f; // 0.8f
@@ -31,7 +31,9 @@ namespace UniVer
         public List<Body> bodies = new List<Body>();
         public List<Vertex> vertices = new List<Vertex>();
         public List<Constraint> constraints = new List<Constraint>();
+        public List<Constraint> globalConstraints = new List<Constraint>();
         public bool enableCollision = true;
+        public bool softIntegration = true;
 
         public World()
         {
@@ -44,7 +46,14 @@ namespace UniVer
             recorder?.BeginSolvingStep("beforeIntegrate", RecordinInfo.All());
             recorder?.EndSolvingStep();
             recorder?.BeginSolvingStep("integrate", RecordinInfo.BodyVertices());
-            Integrate(dt);
+            if (softIntegration)
+            {
+                SoftIntegrate(dt);
+            }
+            else
+            {
+                HardIntegrate(dt);
+            }
             recorder?.EndSolvingStep();
             
             var stepCoef = 1.0f / numIterations;
@@ -90,11 +99,18 @@ namespace UniVer
             body.UpdateBoundingBox();
         }
 
+        public void AddGlobalConstraint(Constraint constraint)
+        {
+            globalConstraints.Add(constraint);
+            constraints.Add(constraint);
+        }
+
         public void Reset()
         {
             bodies.Clear();
             vertices.Clear();
             constraints.Clear();
+            globalConstraints.Clear();
             frame = 0;
         }
 
@@ -110,7 +126,7 @@ namespace UniVer
             return null;
         }
 
-        private void Integrate(float dt)
+        private void SoftIntegrate(float dt)
         {
             for (var i = 0; i < vertices.Count; ++i)
             {
@@ -136,7 +152,7 @@ namespace UniVer
             }
         }
 
-        private void IntegrateOld(float dt)
+        private void HardIntegrate(float dt)
         {
             for(var i = 0; i < vertices.Count; ++i)
             {

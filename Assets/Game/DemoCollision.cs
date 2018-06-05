@@ -9,7 +9,7 @@ namespace UniVer
     {
         protected override void Init(World world)
         {
-            TwoBodies(world);
+            CodePenDemo(world);
         }
 
         protected override World CreateWorld()
@@ -17,7 +17,8 @@ namespace UniVer
             return new World()
             {
                 width = 200f,
-                height = 200f
+                height = 200f,
+                softIntegration = false
             };
         }
 

@@ -12,7 +12,9 @@ namespace UniVer
 
         protected override void Init(World world)
         {
-            LineSegments(world);
+            dragConstraint = new DragConstraint();
+            world.AddGlobalConstraint(dragConstraint);
+            Shape2(world);
         }
 
         protected override World CreateWorld()
@@ -26,9 +28,6 @@ namespace UniVer
             World.gravity = -0.2f;
             World.frictionFloor = 0.8f;
             World.friction = 1.0f;
-
-            dragConstraint = new DragConstraint();
-            w.constraints.Add(dragConstraint);
             return w;
         }
 
@@ -83,6 +82,22 @@ namespace UniVer
                 new Vertex(100, 10) }, 1f);
 
             world.Pins(segment, 0, 4);
+        }
+
+        void Shape1(World world)
+        {
+            world.Tire(new Vector2(50, 50), 30, 30, 0.3f, 0.9f);
+        }
+
+        void Shape2(World world)
+        {
+            world.Tire(new Vector2(50, 50), 30, 7, 0.1f, 0.2f);
+            
+        }
+
+        void Shape3(World world)
+        {
+            world.Tire(new Vector2(50, 50), 30, 3, 1, 1);
         }
     }
 }

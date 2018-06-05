@@ -4,9 +4,19 @@ using UnityEngine;
 
 namespace UniVer
 {
+    public enum ConstraintTag
+    {
+        Distance,
+        Spring,
+        Drag,
+        Angle,
+        Pin
+    }
+
     public interface Constraint
     {
         void Solve(float dt, float stepCoef);
+        int tag { get; }
     }
 
     public class DistanceConstraint : Constraint
@@ -16,6 +26,7 @@ namespace UniVer
         public Vertex v1;
         public float distance;
         public Body parent;
+        public int tag => Tags.DistanceConstraint;
 
         public DistanceConstraint(Vertex v0, Vertex v1, bool edge = false)
         {
@@ -51,6 +62,7 @@ namespace UniVer
 
     public class SpringConstraint : Constraint
     {
+        public int tag => Tags.SpringConstraint;
         public Vertex v0;
         public Vertex v1;
         public float distance;
@@ -76,6 +88,7 @@ namespace UniVer
 
     public class PinConstraint : Constraint
     {
+        public int tag => Tags.PinConstraint;
         public Vertex v;
         public Vector2 position;
 
@@ -93,6 +106,7 @@ namespace UniVer
 
     public class AngleConstraint : Constraint
     {
+        public int tag => Tags.AngleConstraint;
         public Vertex a;
         public Vertex b;
         public Vertex c;
@@ -129,6 +143,8 @@ namespace UniVer
 
     public class DragConstraint : Constraint
     {
+        public int tag => Tags.DragConstraint;
+
         Collision.ClosestInfo info = new Collision.ClosestInfo();
         public Vector2 dragPosition;
 

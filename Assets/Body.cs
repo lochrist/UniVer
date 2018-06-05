@@ -36,10 +36,10 @@ namespace UniVer
         public float min = 0f;
         public float max = 0f;
         public float mass = 1.0f;
+        public int tag = Tags.NormalBody;
         public int id = idPool++;
-        public bool isClosed = true;
 
-        public static int idPool = 0;
+        private static int idPool = 0;
 
         public Body(Vertex[] vertices, Constraint[] constraints, float mass = 1f)
         {
