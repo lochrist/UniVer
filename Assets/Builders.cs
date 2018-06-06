@@ -172,5 +172,59 @@ namespace UniVer
             world.AddBody(b);
             return b;
         }
+
+        public static Body SpiderWeb(this World world, Vector2 origin, float radius, int segments, int depth)
+        {
+            var stiffness = 0.6f;
+            var tensor = 0.3f;
+            var stride = (2 * Mathf.PI) / segments;
+            var n = segments * depth;
+            var radiusStride = radius / n;
+            // var composite = new this.Composite();
+
+
+            var vertices = new List<Vertex>();
+            // particles
+            for (var i = 0; i < n; ++i)
+            {
+                var theta = i * stride + Mathf.Cos(i * 0.4f) * 0.05f + Mathf.Cos(i * 0.05f) * 0.2f;
+                var shrinkingRadius = radius - radiusStride * i + Mathf.Cos(i * 0.1f) * 20;
+
+                var offy = Mathf.Cos(theta * 2.1f) * (radius / depth) * 0.2f;
+                vertices.Add(new Vertex(origin.x + Mathf.Cos(theta) * shrinkingRadius, origin.y + Mathf.Sin(theta) * shrinkingRadius + offy));
+            }
+
+
+            // constraints
+            var constraints = new List<SpringConstraint>();
+            for (var i = 0; i < n - 1; ++i)
+            {
+                // neighbor
+                constraints.Add(new SpringConstraint(vertices[i], vertices[i + 1], stiffness));
+
+                // span rings
+                var off = i + segments;
+                if (off < n - 1)
+                    constraints.Add(new SpringConstraint(vertices[i], vertices[off], stiffness));
+                else
+                    constraints.Add(new SpringConstraint(vertices[i], vertices[n - 1], stiffness));
+            }
+
+            constraints.Add(new SpringConstraint(vertices[0], vertices[segments - 1], stiffness));
+
+            foreach (var c in constraints)
+                c.distance *= tensor;
+
+            var body = new Body(vertices.ToArray(), constraints.Cast<Constraint>().ToArray());
+            world.AddBody(body);
+            var pinIndices = new List<int>();
+            for (var i = 0; i < segments; i += 4)
+            {
+                pinIndices.Add(i);
+            }
+            world.Pins(body, pinIndices.ToArray());
+
+            return body;
+        }
     }
 }
