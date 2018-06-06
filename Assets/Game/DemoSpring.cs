@@ -14,7 +14,8 @@ namespace UniVer
         {
             dragConstraint = new DragConstraint();
             world.AddGlobalConstraint(dragConstraint);
-            Spider(world);
+
+            Tree(world);
         }
 
         protected override World CreateWorld()
@@ -92,7 +93,6 @@ namespace UniVer
         void Shape2(World world)
         {
             world.Tire(new Vector2(50, 50), 30, 7, 0.1f, 0.2f);
-            
         }
 
         void Shape3(World world)
@@ -109,6 +109,12 @@ namespace UniVer
         void Spider(World world)
         {
             world.SpiderWeb(new Vector2(width / 2, height / 2), Mathf.Min(width, height) / 2, 20, 7);
+        }
+
+        void Tree(World world)
+        {
+            World.gravity = 0;
+            world.Tree(new Vector2(width / 4, height - 120), 5, 70, 0.95f, (Mathf.PI / 2) / 3);
         }
     }
 }
