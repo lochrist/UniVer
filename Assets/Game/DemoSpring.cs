@@ -114,7 +114,10 @@ namespace UniVer
         void Tree(World world)
         {
             World.gravity = 0;
-            world.Tree(new Vector2(width / 4, height - 120), 5, 70, 0.95f, (Mathf.PI / 2) / 3);
+            // world.width = 800f;
+            // world.height = 800.0f;
+            World.friction = 0.98f;
+            world.Tree(new Vector2(100, 180), 5, 35, 0.95f, (Mathf.PI / 2) / 3);
         }
     }
 }

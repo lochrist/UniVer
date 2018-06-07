@@ -125,7 +125,7 @@ namespace UniVer
         public void Solve(float dt, float stepCoef)
         {
             var currentAngle = MathUtils.Angle2(b.position, a.position, c.position);
-            var diff = angle - currentAngle;
+            var diff = currentAngle - angle;
 
             if (diff <= -Mathf.PI)
                 diff += 2 * Mathf.PI;

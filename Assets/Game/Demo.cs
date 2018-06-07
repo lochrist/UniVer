@@ -84,7 +84,7 @@ namespace UniVer
             if (live)
             {
                 // Debug.Log("FixedUpdate");
-                World.gravity = gravity ? 0.1f : 0.0f;
+                // World.gravity = gravity ? 0.1f : 0.0f;
                 world.Step(Time.deltaTime);
             }
         }

@@ -242,9 +242,9 @@ namespace UniVer
             constraints.Add(new AngleConstraint(root, treeBase, firstBranch, 1));
 
             // animates the tree at the beginning
-            var noise = 10;
-            for (var i = 0; i < vertices.Count; ++i)
-                vertices[i].position += new Vector2(Mathf.Floor(Random.value * noise), Mathf.Floor(Random.value * noise));
+            var noise = 3;
+            for (var i = 2; i < vertices.Count; ++i)
+                vertices[i].position += new Vector2(Mathf.Floor(Random.value * noise), 0);
 
             var body = new Body(vertices.ToArray(), constraints.ToArray());
             world.AddBody(body);
@@ -271,7 +271,8 @@ namespace UniVer
                 var b = Branch(vertices, constraints, particle, i + 1, nMax, coef * coef, MathUtils.Rotate(normal, new Vector2(0, 0), theta), branchLength, theta);
 
 
-                var jointStrength = Mathf.Lerp(0, i / nMax, 0.7f);
+                // var jointStrength = Mathf.Lerp(0, (float)i / nMax, 0.7f);
+                var jointStrength = Mathf.Lerp(0.7f, 0, (float)i / nMax);
                 constraints.Add(new AngleConstraint(parent, particle, a, jointStrength));
                 constraints.Add(new AngleConstraint(parent, particle, b, jointStrength));
             }
