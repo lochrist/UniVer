@@ -180,8 +180,6 @@ namespace UniVer
             var stride = (2 * Mathf.PI) / segments;
             var n = segments * depth;
             var radiusStride = radius / n;
-            // var composite = new this.Composite();
-
 
             var vertices = new List<Vertex>();
             // particles
@@ -193,7 +191,6 @@ namespace UniVer
                 var offy = Mathf.Cos(theta * 2.1f) * (radius / depth) * 0.2f;
                 vertices.Add(new Vertex(origin.x + Mathf.Cos(theta) * shrinkingRadius, origin.y + Mathf.Sin(theta) * shrinkingRadius + offy));
             }
-
 
             // constraints
             var constraints = new List<SpringConstraint>();
@@ -254,24 +251,18 @@ namespace UniVer
 
         private static Vertex Branch(List<Vertex> vertices, List<Constraint> constraints, Vertex parent, int i, int nMax, float coef, Vector2 normal, float branchLength, float theta)
         {
-            var lineCoef = 0.7f;
+            const float lineCoef = 0.7f;
 
             var particle = new Vertex(parent.position + (normal * (branchLength * coef)));
             vertices.Add(particle);
 
             var dc = new SpringConstraint(parent, particle, lineCoef);
-            // dc.p = i / nMax; // a hint for drawing
             constraints.Add(dc);
-
-            // particle.leaf = !(i < nMax);
-
             if (i < nMax)
             {
                 var a = Branch(vertices, constraints, particle, i + 1, nMax, coef * coef, MathUtils.Rotate(normal, new Vector2(0, 0), -theta), branchLength, theta);
                 var b = Branch(vertices, constraints, particle, i + 1, nMax, coef * coef, MathUtils.Rotate(normal, new Vector2(0, 0), theta), branchLength, theta);
 
-
-                // var jointStrength = Mathf.Lerp(0, (float)i / nMax, 0.7f);
                 var jointStrength = Mathf.Lerp(0.7f, 0, (float)i / nMax);
                 constraints.Add(new AngleConstraint(parent, particle, a, jointStrength));
                 constraints.Add(new AngleConstraint(parent, particle, b, jointStrength));
