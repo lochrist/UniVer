@@ -9,15 +9,14 @@ namespace UniVer
     {
         protected override void Init(World world)
         {
-            CodePenDemo(world);
+
         }
 
         protected override World CreateWorld()
         {
+            World.gravity = 0.2f;
             return new World()
             {
-                width = 200f,
-                height = 200f,
                 softIntegration = false
             };
         }
@@ -28,26 +27,55 @@ namespace UniVer
             DragHandle();
         }
 
-        void SingleRectFalling(World world)
+        private void DragHandle()
+        {
+            model.dragPosition = GetWorldPosition(Input.mousePosition);
+            if (Input.GetMouseButtonDown(0))
+            {
+                var body = world.GetBodyAt(model.dragPosition);
+                if (body != null)
+                {
+                    model.draggedBody = body;
+                    model.draggedVertex = Collision.GetClosestVertex(body.vertices, model.dragPosition);
+                }
+            }
+            else if (Input.GetMouseButton(0) && model.draggedBody != null)
+            {
+                var s = model.draggedBody.mass * World.forceDrag;
+                model.draggedVertex.position += (model.dragPosition - model.draggedVertex.position) / s;
+            }
+            else if (Input.GetMouseButtonUp(0) && model.draggedBody != null)
+            {
+                model.draggedBody = null;
+                model.draggedVertex = null;
+            }
+        }
+
+        #region Demos
+        [Demo]
+        public void SingleRectFalling(World world)
         {
             // world.CreateRectangle(0, 2, 1, 2, 1);
             world.CreateRectangle(0, 0, 10, 10, 1);
         }
 
-        void RectOnFloor(World world)
+        [Demo]
+        public void RectOnFloor(World world)
         {
             // world.CreateRectangle(0, 2, 1, 2, 1);
             world.CreateRectangle(100, 189, 10, 10, 1);
         }
 
-        void TwoBodies(World world)
+        [Demo]
+        public void TwoBodies(World world)
         {
             world.CreateRectangle(50, 170, 4, 4);
 
             world.CreateRectangle(40, 180, 32, 4);
         }
 
-        void FourRectsColliding(World world)
+        [Demo]
+        public void FourRectsColliding(World world)
         {
             var s = 4.57f;
             world.CreateRectangle(77f, 74f, s, s, 1);
@@ -57,16 +85,17 @@ namespace UniVer
             world.CreateRectangle(117f, 91f, s, s, 1);
         }
 
-        void TriangleCollision(World world)
+        [Demo]
+        public void TriangleCollision(World world)
         {
-            var w = width / 35f;
-            var h = height / 2 - 4.5f * w;
+            var w = world.width / 35f;
+            var h = world.height / 2 - 4.5f * w;
             world.CreateTriangle(w * 7.5f, h + w * 11, w * 10, w * 2, 20);
 
-            var triangleHeight = height - w * 1.8f + 0.4f * w * 0.5f;
+            var triangleHeight = world.height - w * 1.8f + 0.4f * w * 0.5f;
             var triSize = w * 4;
             world.CreateTriangle(
-                width / 4,
+                world.width / 4,
                 triangleHeight,
                 triSize,
                 triSize,
@@ -74,7 +103,8 @@ namespace UniVer
             );
         }
 
-        void CodePenDemo(World world)
+        [Demo(true)]
+        public void CodePenDemo(World world)
         {
             var codepen = new[]
             {
@@ -89,8 +119,8 @@ namespace UniVer
                 "                    *             "
             };
 
-            var w = width / 35f;
-            var h = height / 2 - 4.5f * w;
+            var w = world.width / 35f;
+            var h = world.height / 2 - 4.5f * w;
             var rectSize = w * 0.8f;
             for (var i = 0; i < codepen.Length; i++)
             {
@@ -106,10 +136,10 @@ namespace UniVer
             world.CreateTriangle(w * 7.5f, h + w * 11, w * 10, w * 2, 20);
             world.CreateTriangle(w * 27.5f, h + w * 11, w * 10, w * 2, 20);
 
-            var triangleHeight = height - w * 1.8f + 0.4f * w * 0.5f;
+            var triangleHeight = world.height - w * 1.8f + 0.4f * w * 0.5f;
             var triSize = w * 4;
             world.CreateTriangle(
-                width / 2,
+                world.width / 2,
                 triangleHeight,
                 triSize,
                 triSize,
@@ -117,39 +147,14 @@ namespace UniVer
             );
 
             world.CreateTriangle(
-                width / 4,
+                world.width / 4,
                 triangleHeight,
                 triSize,
                 triSize,
                 10
             );
         }
-
-        private void DragHandle()
-        {
-            model.dragPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            model.dragPosition.y = height - model.dragPosition.y;
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                var body = world.GetBodyAt(model.dragPosition);
-                if (body != null)
-                {
-                    model.draggedBody = body;
-                    model.draggedVertex = Collision.GetClosestVertex(body.vertices, model.dragPosition);
-                }
-            }
-            else if (Input.GetMouseButton(0) && model.draggedBody != null)
-            {
-                var s = model.draggedBody.mass * World.forceDrag;
-                model.draggedVertex.position += ((Vector2)model.dragPosition - model.draggedVertex.position) / s;
-            }
-            else if (Input.GetMouseButtonUp(0) && model.draggedBody != null)
-            {
-                model.draggedBody = null;
-                model.draggedVertex = null;
-            }
-        }
+        #endregion
     }
 
 }

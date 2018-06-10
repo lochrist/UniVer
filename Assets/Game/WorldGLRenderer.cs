@@ -9,18 +9,10 @@ namespace UniVer
 {
     public class WorldGLRenderer : WorldRenderer
     {
-        private InteractiveModel model;
-        private World world;
-
         private Dictionary<int, Action<Body>> bodyRenderers;
         private Dictionary<int, Action<Constraint>> constraintRenderers;
 
         static Material lineMaterial;
-        private Color ToColor(int r, int g, int b, int a = 255)
-        {
-            return new UnityEngine.Color((float)r / 255f, (float)g / 255f, (float)b / 255f, (float)a / 255f);
-        }
-
         static void CreateLineMaterial()
         {
             if (!lineMaterial)
@@ -40,16 +32,10 @@ namespace UniVer
             }
         }
 
-        public override void BindModel(InteractiveModel model)
-        {
-            this.model = model;
-            this.world = model.world;
-        }
-
         // Will be called after all regular rendering is done
         public void OnRenderObject()
         {
-            RenderWorldGL();
+            RenderWorld();
             // RenderWorldShaper();
         }
 
@@ -57,11 +43,11 @@ namespace UniVer
         {
             Drawing2D.ScreenWidth = world.width;
             Drawing2D.ScreenHeight = world.height;
-            Drawing2D.DrawRect(new Rect(0, 0, world.width, world.height), ToColor(0, 220, 20));
+            Drawing2D.DrawRect(new Rect(0, 0, world.width, world.height), DemoUtils.ToColor(0, 220, 20));
 
             foreach (var body in world.bodies)
             {
-                Drawing2D.DrawPolygon(body.vertices.Select(v => v.position).ToArray(), ToColor(220, 20, 20));
+                Drawing2D.DrawPolygon(body.vertices.Select(v => v.position).ToArray(), DemoUtils.ToColor(220, 20, 20));
             }
         }
 
@@ -76,20 +62,12 @@ namespace UniVer
             // match our transform
             // GL.MultMatrix(transform.localToWorldMatrix);
 
-            DrawWorldBounds();
-
-            foreach (var body in world.bodies)
-                DrawBody(body);
-
-            foreach (var c in world.globalConstraints)
-                DrawConstraint(c);
-
-            DrawDragConstraint();
+            RenderWorld();
 
             GL.PopMatrix();
         }
 
-        private void DrawWorldBounds()
+        public override void DrawWorldBounds()
         {
             GL.Begin(GL.LINE_STRIP);
 
@@ -108,7 +86,7 @@ namespace UniVer
             GL.End();
         }
 
-        private void DrawBody(Body body)
+        public override void DrawBody(Body body)
         {
             switch(body.tag)
             {
@@ -125,7 +103,7 @@ namespace UniVer
             }
         }
 
-        private void DrawDragConstraint()
+        public override void DrawDragConstraint()
         {
             if (model.draggedBody == null || model.draggedVertex == null)
                 return;
@@ -140,7 +118,7 @@ namespace UniVer
             GL.End();
         }
 
-        private void DrawConstraint(Constraint c)
+        public override void DrawConstraint(Constraint c)
         {
             switch (c.tag)
             {
