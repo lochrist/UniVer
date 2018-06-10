@@ -28,6 +28,7 @@ namespace UniVer
             };
 
             var b = new Body(vertices, constraints, mass);
+            b.tag = Tags.SolidBody;
             world.AddBody(b);
             return b;
         }
@@ -52,6 +53,7 @@ namespace UniVer
             };
 
             var b = new Body(vertices, constraints, mass);
+            b.tag = Tags.SolidBody;
             world.AddBody(b);
             return b;
         }

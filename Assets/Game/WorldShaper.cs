@@ -48,17 +48,66 @@ namespace UniVer {
         {
             switch (body.tag)
             {
-                case Tags.NormalBody:
-                    foreach (var c in body.constraints)
-                        DrawConstraint(c);
-
-                    foreach (var v in body.vertices)
-                        DrawVertex(v);
-
-                    break;
                 case Tags.Cloth:
                     break;
+                case Tags.SolidBody:
+                    switch(body.vertices.Length)
+                    {
+                        case 3:
+                            Drawing2D.FillTriangle(
+                                body.vertices[0].position + DemoUtils.offset,
+                                body.vertices[1].position + DemoUtils.offset,
+                                body.vertices[2].position + DemoUtils.offset,
+                                DemoUtils.triangleColor
+                                );
+                            DrawBodyOutline(body);
+                            break;
+                        case 4:
+                            Drawing2D.FillTriangle(
+                                body.vertices[0].position + DemoUtils.offset,
+                                body.vertices[1].position + DemoUtils.offset,
+                                body.vertices[2].position + DemoUtils.offset,
+                                DemoUtils.rectangleColor
+                                );
+                            Drawing2D.FillTriangle(
+                                body.vertices[2].position + DemoUtils.offset,
+                                body.vertices[3].position + DemoUtils.offset,
+                                body.vertices[0].position + DemoUtils.offset,
+                                DemoUtils.rectangleColor
+                                );
+                            DrawBodyOutline(body);
+                            break;
+                        default:
+                            DrawNormalBody(body);
+                            break;
+                    }
+                    break;
+                case Tags.NormalBody:
+                default:
+                    DrawNormalBody(body);
+                    break;
             }
+        }
+
+        public void DrawNormalBody(Body body)
+        {
+            foreach (var c in body.constraints)
+                DrawConstraint(c);
+
+            foreach (var v in body.vertices)
+                DrawVertex(v);
+        }
+
+        public void DrawBodyOutline(Body body)
+        {
+            for(var i = 0; i < body.vertices.Length - 1; ++i)
+            {
+                var v0 = body.vertices[i];
+                var v1 = body.vertices[i + 1];
+                Drawing2D.DrawLine(v0.position + DemoUtils.offset, v1.position + DemoUtils.offset, DemoUtils.constraintColor);
+            }
+
+            Drawing2D.DrawLine(body.vertices[body.vertices.Length - 1].position + DemoUtils.offset, body.vertices[0].position + DemoUtils.offset, DemoUtils.constraintColor);
         }
 
         public override void DrawConstraint(Constraint c)
@@ -77,7 +126,7 @@ namespace UniVer {
                     break;
                 case Tags.PinConstraint:
                     var pin = c as PinConstraint;
-                    Drawing2D.FillCircle(pin.position + DemoUtils.offset, 1f, DemoUtils.pinColor);
+                    Drawing2D.FillCircle(pin.position + DemoUtils.offset, 6f, DemoUtils.pinColor);
                     break;
                 case Tags.AngleConstraint:
                     break;

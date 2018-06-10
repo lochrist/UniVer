@@ -11,7 +11,7 @@ public class DemoUtils {
     public static Color worldBoundsColor = ToColor(45, 45, 45);
     public static Color vertexColor = ToColor("#2dad8f");
     public static Color selectedVertexColor = ToColor(0, 0, 255);
-    public static Color squareColor = ToColor(70, 70, 70);
+    public static Color rectangleColor = ToColor(70, 70, 70);
     public static Color triangleColor = ToColor(225, 10, 10);
     public static Color dragConstraintColor = ToColor(0, 0, 220);
     public const float margin = 30f;
