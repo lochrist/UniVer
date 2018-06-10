@@ -241,7 +241,7 @@ namespace UniVer
             constraints.Add(new AngleConstraint(root, treeBase, firstBranch, 1));
 
             // animates the tree at the beginning
-            var noise = 3;
+            var noise = 0;
             for (var i = 2; i < vertices.Count; ++i)
                 vertices[i].position += new Vector2(Mathf.Floor(Random.value * noise), 0);
 

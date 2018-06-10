@@ -40,8 +40,10 @@ namespace UniVer
             if (Input.GetMouseButtonDown(0))
             {
                 dragInfo = Collision.GetClosestVertex(world, model.dragPosition);
+                Debug.Log("Click: " + model.dragPosition);
                 if (dragInfo.body != null)
                 {
+                    Debug.Log(".......... found: " + dragInfo.v.position);
                     model.draggedBody = dragInfo.body;
                     dragConstraint.Activate(dragInfo);
                 }
@@ -60,16 +62,6 @@ namespace UniVer
 
         #region Demos
         [Demo]
-        public void SingleRectFalling2(World world)
-        {
-            // world.CreateRectangle(0, 2, 1, 2, 1);
-            World.gravity = -0.2f;
-            World.frictionFloor = 0.8f;
-            World.friction = 1.0f;
-            world.CreateRectangle(100, 100, 10, 10, 1);
-        }
-
-        [Demo(true)]
         public void LineSegments(World world)
         {
             var segment = world.LineSegments(new[] {
@@ -85,19 +77,19 @@ namespace UniVer
         [Demo]
         public void Shape1(World world)
         {
-            world.Tire(new Vector2(200, 50), 50, 30, 0.3f, 0.9f);
+            world.Tire(new Vector2(75, 50), 50, 30, 0.3f, 0.9f);
         }
 
         [Demo]
         public void Shape2(World world)
         {
-            world.Tire(new Vector2(400, 50), 70, 7, 0.1f, 0.2f);
+            world.Tire(new Vector2(200, 50), 70, 7, 0.1f, 0.2f);
         }
 
         [Demo]
         public void Shape3(World world)
         {
-            world.Tire(new Vector2(600, 50), 70, 3, 1, 1);
+            world.Tire(new Vector2(350, 50), 70, 3, 1, 1);
         }
 
         [Demo]
@@ -122,12 +114,12 @@ namespace UniVer
             world.SpiderWeb(new Vector2(world.width / 2, world.height / 2), Mathf.Min(world.width, world.height) / 2, 20, 7);
         }
 
-        [Demo]
+        [Demo(true)]
         public void Tree(World world)
         {
-            World.gravity = 0;
+            world.enableGravity = false;
             World.friction = 0.98f;
-            world.Tree(new Vector2(100, 180), 5, 35, 0.95f, (Mathf.PI / 2) / 3);
+            world.Tree(new Vector2(world.width / 2, world.height - 120), 5, 70, 0.95f, (Mathf.PI / 2) / 3);
         }
         #endregion
     }
