@@ -66,9 +66,7 @@ namespace UniVer
     public abstract class Demo : MonoBehaviour
     {
         public bool live = true;
-        public bool gravity = true;
         public WorldRenderer worldRenderer;
-
         protected Camera mainCamera;
         protected InteractiveModel model;
         protected World world;
@@ -159,11 +157,8 @@ namespace UniVer
                 ResetWorld();
             }
 
-            if (GUILayout.Button("Jump"))
-            {
-                world.bodies[0].vertices[0].position += new Vector2(20, -20);
-            }
-
+            world.enableGravity = GUILayout.Toggle(world.enableGravity, "Gravity");
+            
             GUILayout.Label("Frame: " + world.frame);
             GUILayout.EndHorizontal();
         }
@@ -179,8 +174,6 @@ namespace UniVer
         {
             if (live)
             {
-                // Debug.Log("FixedUpdate");
-                // World.gravity = gravity ? 0.1f : 0.0f;
                 world.Step(Time.deltaTime);
             }
         }

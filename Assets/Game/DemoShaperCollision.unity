@@ -211,7 +211,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   live: 1
-  gravity: 1
   worldRenderer: {fileID: 2030210373}
 --- !u!1 &1813419406
 GameObject:
@@ -415,13 +414,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc7e031a060739b479b6a0aacf2f811c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FontImage: {fileID: 0}
-  FontConfig: {fileID: 0}
-  CustomTexturePicture: {fileID: 0}
-  CustomTexture3D: {fileID: 0}
-  CustomTexture3DVertical: {fileID: 0}
-  CustomTextureLines: {fileID: 0}
-  CustomTextureProgressBar: {fileID: 0}
 --- !u!222 &2030210376
 CanvasRenderer:
   m_ObjectHideFlags: 0

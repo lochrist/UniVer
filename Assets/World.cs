@@ -34,6 +34,7 @@ namespace UniVer
         public List<Constraint> globalConstraints = new List<Constraint>();
         public bool enableCollision = true;
         public bool softIntegration = true;
+        public bool enableGravity = true;
 
         public World()
         {
@@ -145,7 +146,10 @@ namespace UniVer
                 v.oldPosition = v.position;
 
                 // gravity
-                v.position.y += gravity;
+                if (enableGravity)
+                {
+                    v.position.y += gravity;
+                }
 
                 // inertia  
                 v.position += velocity;
@@ -162,9 +166,13 @@ namespace UniVer
 
                 // TODO: check if this is the right place to add gravity.
                 v.position.x += viscosity * x - viscosity * v.oldPosition.x;
-                v.position.y += viscosity * y - viscosity * v.oldPosition.y + gravity;
+                v.position.y += viscosity * y - viscosity * v.oldPosition.y;
 
-                // TODO: check if that actually works
+                if (enableGravity)
+                {
+                    v.position.y += gravity;
+                }
+
                 v.oldPosition.Set(x, y);
 
                 //
