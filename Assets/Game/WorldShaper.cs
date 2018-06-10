@@ -10,18 +10,12 @@ namespace UniVer {
         private Rect mParentRect;
         private Rect worldRect;
 
-        public override void BindModel(InteractiveModel model)
-        {
-            base.BindModel(model);
-            worldRect = new Rect(DemoUtils.offset.x, DemoUtils.offset.y, world.width, world.height);
-        }
-
         private void OnGUI()
         {
             Render();
         }
 
-        public void OnRenderObject()
+        private void OnRenderObject()
         {
         }
 
@@ -39,6 +33,13 @@ namespace UniVer {
             Drawing2D.ClearParentBounds();
         }
 
+        #region Wolrd Draw API
+        public override void BindModel(InteractiveModel model)
+        {
+            base.BindModel(model);
+            worldRect = new Rect(DemoUtils.offset.x, DemoUtils.offset.y, world.width, world.height);
+        }
+
         public override void DrawWorldBounds()
         {
             Drawing2D.DrawRect(worldRect, DemoUtils.worldBoundsColor);
@@ -51,63 +52,13 @@ namespace UniVer {
                 case Tags.Cloth:
                     break;
                 case Tags.SolidBody:
-                    switch(body.vertices.Length)
-                    {
-                        case 3:
-                            Drawing2D.FillTriangle(
-                                body.vertices[0].position + DemoUtils.offset,
-                                body.vertices[1].position + DemoUtils.offset,
-                                body.vertices[2].position + DemoUtils.offset,
-                                DemoUtils.triangleColor
-                                );
-                            DrawBodyOutline(body);
-                            break;
-                        case 4:
-                            Drawing2D.FillTriangle(
-                                body.vertices[0].position + DemoUtils.offset,
-                                body.vertices[1].position + DemoUtils.offset,
-                                body.vertices[2].position + DemoUtils.offset,
-                                DemoUtils.rectangleColor
-                                );
-                            Drawing2D.FillTriangle(
-                                body.vertices[2].position + DemoUtils.offset,
-                                body.vertices[3].position + DemoUtils.offset,
-                                body.vertices[0].position + DemoUtils.offset,
-                                DemoUtils.rectangleColor
-                                );
-                            DrawBodyOutline(body);
-                            break;
-                        default:
-                            DrawNormalBody(body);
-                            break;
-                    }
+                    DrawSolidBody(body);
                     break;
                 case Tags.NormalBody:
                 default:
                     DrawNormalBody(body);
                     break;
             }
-        }
-
-        public void DrawNormalBody(Body body)
-        {
-            foreach (var c in body.constraints)
-                DrawConstraint(c);
-
-            foreach (var v in body.vertices)
-                DrawVertex(v);
-        }
-
-        public void DrawBodyOutline(Body body)
-        {
-            for(var i = 0; i < body.vertices.Length - 1; ++i)
-            {
-                var v0 = body.vertices[i];
-                var v1 = body.vertices[i + 1];
-                Drawing2D.DrawLine(v0.position + DemoUtils.offset, v1.position + DemoUtils.offset, DemoUtils.constraintColor);
-            }
-
-            Drawing2D.DrawLine(body.vertices[body.vertices.Length - 1].position + DemoUtils.offset, body.vertices[0].position + DemoUtils.offset, DemoUtils.constraintColor);
         }
 
         public override void DrawConstraint(Constraint c)
@@ -133,17 +84,73 @@ namespace UniVer {
             }
         }
 
-        private void DrawVertex(Vertex v)
-        {
-            Drawing2D.FillCircle(v.position + DemoUtils.offset, 3f, DemoUtils.vertexColor);
-        }
-
         public override void DrawDragConstraint()
         {
             if (model.draggedBody == null || model.draggedVertex == null || model.dragPosition == null)
                 return;
 
             Drawing2D.DrawLine(model.draggedVertex.position + DemoUtils.offset, model.dragPosition + DemoUtils.offset, DemoUtils.dragConstraintColor);
+        }
+        #endregion
+
+        private void DrawNormalBody(Body body)
+        {
+            foreach (var c in body.constraints)
+                DrawConstraint(c);
+
+            foreach (var v in body.vertices)
+                DrawVertex(v);
+        }
+
+        private void DrawSolidBody(Body body)
+        {
+            switch (body.vertices.Length)
+            {
+                case 3:
+                    Drawing2D.FillTriangle(
+                        body.vertices[0].position + DemoUtils.offset,
+                        body.vertices[1].position + DemoUtils.offset,
+                        body.vertices[2].position + DemoUtils.offset,
+                        DemoUtils.triangleColor
+                        );
+                    DrawBodyOutline(body);
+                    break;
+                case 4:
+                    Drawing2D.FillTriangle(
+                        body.vertices[0].position + DemoUtils.offset,
+                        body.vertices[1].position + DemoUtils.offset,
+                        body.vertices[2].position + DemoUtils.offset,
+                        DemoUtils.rectangleColor
+                        );
+                    Drawing2D.FillTriangle(
+                        body.vertices[2].position + DemoUtils.offset,
+                        body.vertices[3].position + DemoUtils.offset,
+                        body.vertices[0].position + DemoUtils.offset,
+                        DemoUtils.rectangleColor
+                        );
+                    DrawBodyOutline(body);
+                    break;
+                default:
+                    DrawNormalBody(body);
+                    break;
+            }
+        }
+
+        private void DrawBodyOutline(Body body)
+        {
+            for(var i = 0; i < body.vertices.Length - 1; ++i)
+            {
+                var v0 = body.vertices[i];
+                var v1 = body.vertices[i + 1];
+                Drawing2D.DrawLine(v0.position + DemoUtils.offset, v1.position + DemoUtils.offset, DemoUtils.constraintColor);
+            }
+
+            Drawing2D.DrawLine(body.vertices[body.vertices.Length - 1].position + DemoUtils.offset, body.vertices[0].position + DemoUtils.offset, DemoUtils.constraintColor);
+        }
+
+        private void DrawVertex(Vertex v)
+        {
+            Drawing2D.FillCircle(v.position + DemoUtils.offset, 3f, DemoUtils.vertexColor);
         }
     }
 
