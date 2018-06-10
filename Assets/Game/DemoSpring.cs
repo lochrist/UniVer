@@ -58,6 +58,10 @@ namespace UniVer
                 model.draggedVertex = null;
                 dragConstraint.Deactivate();
             }
+            else
+            {
+                model.draggedVertex = Collision.GetClosestVertex(world, model.dragPosition).v;
+            }
         }
 
         #region Demos

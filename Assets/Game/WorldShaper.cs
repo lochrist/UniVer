@@ -77,7 +77,7 @@ namespace UniVer {
                     break;
                 case Tags.PinConstraint:
                     var pin = c as PinConstraint;
-                    Drawing2D.FillCircle(pin.position + DemoUtils.offset, 6f, DemoUtils.pinColor);
+                    Drawing2D.FillCircle(pin.position + DemoUtils.offset, DemoUtils.pinSize, DemoUtils.pinColor);
                     break;
                 case Tags.AngleConstraint:
                     break;
@@ -86,10 +86,15 @@ namespace UniVer {
 
         public override void DrawDragConstraint()
         {
-            if (model.draggedBody == null || model.draggedVertex == null || model.dragPosition == null)
-                return;
+            if (model.draggedVertex != null)
+            {
+                if (model.draggedBody == null)
+                {
+                    Drawing2D.DrawLine(model.draggedVertex.position + DemoUtils.offset, model.dragPosition + DemoUtils.offset, DemoUtils.dragConstraintColor);
+                }
 
-            Drawing2D.DrawLine(model.draggedVertex.position + DemoUtils.offset, model.dragPosition + DemoUtils.offset, DemoUtils.dragConstraintColor);
+                Drawing2D.DrawCircle(model.draggedVertex.position + DemoUtils.offset, DemoUtils.pinSize, 8, DemoUtils.dragConstraintColor);
+            }
         }
         #endregion
 
@@ -150,7 +155,7 @@ namespace UniVer {
 
         private void DrawVertex(Vertex v)
         {
-            Drawing2D.FillCircle(v.position + DemoUtils.offset, 3f, DemoUtils.vertexColor);
+            Drawing2D.FillCircle(v.position + DemoUtils.offset, DemoUtils.vertexSize, DemoUtils.vertexColor);
         }
     }
 

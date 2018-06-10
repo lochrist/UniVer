@@ -163,8 +163,6 @@ namespace UniVer
                 var v = vertices[i];
                 var x = v.position.x;
                 var y = v.position.y;
-
-                // TODO: check if this is the right place to add gravity.
                 v.position.x += viscosity * x - viscosity * v.oldPosition.x;
                 v.position.y += viscosity * y - viscosity * v.oldPosition.y;
 
@@ -180,10 +178,12 @@ namespace UniVer
                 //
                 if (v.position.y < 0)
                 {
+                    // Ceiling
                     v.position.y = 0;
                 }
                 else if (v.position.y > height)
                 {
+                    // Floor
                     v.position.x -= (v.position.y - height) * (v.position.x - v.oldPosition.x) * frictionFloor;
                     v.position.y = height;
                 }

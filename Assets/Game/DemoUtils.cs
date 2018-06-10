@@ -16,6 +16,8 @@ public class DemoUtils {
     public static Color dragConstraintColor = ToColor(0, 0, 220);
     public const float margin = 30f;
     public static Vector2 offset = new Vector2(DemoUtils.margin, DemoUtils.margin);
+    public static float pinSize = 6f;
+    public static float vertexSize = 3f;
 
     public static Color ToColor(int r, int g, int b, float a = 1.0f)
     {
