@@ -37,11 +37,11 @@ namespace UniVer {
         public override void BindModel(InteractiveModel model)
         {
             base.BindModel(model);
-            worldRect = new Rect(DemoUtils.offset.x, DemoUtils.offset.y, world.width, world.height);
         }
 
         public override void DrawWorldBounds()
         {
+            var worldRect = new Rect(DemoUtils.offset.x, DemoUtils.offset.y, world.width, world.height);
             Drawing2D.DrawRect(worldRect, DemoUtils.worldBoundsColor);
         }
 

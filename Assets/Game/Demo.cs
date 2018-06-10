@@ -76,12 +76,7 @@ namespace UniVer
         // Use this for initialization
         protected virtual void Start()
         {
-            world = CreateWorld();
-            world.height = Screen.height - (2 * DemoUtils.margin);
-            world.width = Screen.width - (2 * DemoUtils.margin);
 
-            model = new InteractiveModel(world);
-            worldRenderer.BindModel(model);
             mainCamera = GetComponent<Camera>();
             mainCamera.backgroundColor = DemoUtils.backgroundColor;
 
@@ -110,7 +105,7 @@ namespace UniVer
                 currentDemoIndex = defaultIndex;
             }
 
-            ResetWorld();
+            InitDemo();
         }
 
         protected abstract World CreateWorld();
@@ -134,7 +129,7 @@ namespace UniVer
                 currentDemoIndex--;
                 if (currentDemoIndex == -1)
                     currentDemoIndex = demos.Count - 1;
-                ResetWorld();
+                InitDemo();
             }
             GUILayout.Label(demos[currentDemoIndex].name);
             if (GUILayout.Button("Next"))
@@ -142,7 +137,7 @@ namespace UniVer
                 currentDemoIndex++;
                 if (currentDemoIndex == demos.Count)
                     currentDemoIndex = 0;
-                ResetWorld();
+                InitDemo();
             }
 
             GUILayout.Space(20);
@@ -163,9 +158,21 @@ namespace UniVer
             GUILayout.EndHorizontal();
         }
 
+        private void InitDemo()
+        {
+            world = CreateWorld();
+            model = new InteractiveModel(world);
+            worldRenderer.BindModel(model);
+
+            ResetWorld();
+        }
+
         private void ResetWorld()
         {
             world.Reset();
+            world.height = Screen.height - (2 * DemoUtils.margin);
+            world.width = Screen.width - (2 * DemoUtils.margin);
+
             Init(world);
             demos[currentDemoIndex].createDemo(world);
         }

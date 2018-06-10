@@ -203,6 +203,9 @@ namespace UniVer
                 if (v.position.y > height - 1)
                     v.position.y = height - 1;
 
+                if (v.position.y < 0)
+                    v.position.y = 0;
+
                 if (v.position.x < 0)
                     v.position.x = 0;
 
