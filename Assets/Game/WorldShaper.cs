@@ -54,6 +54,10 @@ namespace UniVer {
                 case Tags.SolidBody:
                     DrawSolidBody(body);
                     break;
+                case Tags.Tree:
+                    Drawing2D.DrawLine(body.vertices[0].position + DemoUtils.offset, body.vertices[1].position + DemoUtils.offset, DemoUtils.constraintColor);
+                    DrawNormalBody(body);
+                    break;
                 case Tags.NormalBody:
                 default:
                     DrawNormalBody(body);

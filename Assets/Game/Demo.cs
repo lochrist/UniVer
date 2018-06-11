@@ -121,7 +121,6 @@ namespace UniVer
 
         public virtual void OnGUI()
         {
-            // Debug.Log("OnGui");
             GUILayout.BeginHorizontal();
 
             if (GUILayout.Button("Prev"))

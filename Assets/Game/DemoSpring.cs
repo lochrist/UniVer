@@ -40,10 +40,8 @@ namespace UniVer
             if (Input.GetMouseButtonDown(0))
             {
                 dragInfo = Collision.GetClosestVertex(world, model.dragPosition);
-                Debug.Log("Click: " + model.dragPosition);
                 if (dragInfo.body != null)
                 {
-                    Debug.Log(".......... found: " + dragInfo.v.position);
                     model.draggedBody = dragInfo.body;
                     dragConstraint.Activate(dragInfo);
                 }

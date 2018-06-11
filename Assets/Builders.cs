@@ -229,7 +229,7 @@ namespace UniVer
         public static Body Tree(this World world, Vector2 origin, int depth, float branchLength, float segmentCoef, float theta)
         {
             var treeBase = new Vertex(origin);
-            var root = new Vertex(origin + new Vector2(0, 10));
+            var root = new Vertex(origin + new Vector2(0, 50));
 
             var vertices = new List<Vertex>();
             var constraints = new List<Constraint>();
@@ -241,11 +241,12 @@ namespace UniVer
             constraints.Add(new AngleConstraint(root, treeBase, firstBranch, 1));
 
             // animates the tree at the beginning
-            var noise = 0;
+            var noise = 3;
             for (var i = 2; i < vertices.Count; ++i)
                 vertices[i].position += new Vector2(Mathf.Floor(Random.value * noise), 0);
 
             var body = new Body(vertices.ToArray(), constraints.ToArray());
+            body.tag = Tags.Tree;
             world.AddBody(body);
             world.Pins(body, 0, 1);
             return body;
