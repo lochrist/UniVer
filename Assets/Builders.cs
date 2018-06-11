@@ -226,6 +226,12 @@ namespace UniVer
             return body;
         }
 
+        public class TreeFoliageDesc
+        {
+            public List<int>  leaves = new List<int>();
+            public List<float> branches = new List<float>();
+        }
+
         public static Body Tree(this World world, Vector2 origin, int depth, float branchLength, float segmentCoef, float theta)
         {
             var treeBase = new Vertex(origin);
@@ -233,11 +239,12 @@ namespace UniVer
 
             var vertices = new List<Vertex>();
             var constraints = new List<Constraint>();
+            var desc = new TreeFoliageDesc();
 
             vertices.Add(treeBase);
             vertices.Add(root);
             
-            var firstBranch = Branch(vertices, constraints, treeBase, 0, depth, segmentCoef, new Vector2(0, -1), branchLength, theta);
+            var firstBranch = Branch(vertices, constraints, desc, treeBase, 0, depth, segmentCoef, new Vector2(0, -1), branchLength, theta);
             constraints.Add(new AngleConstraint(root, treeBase, firstBranch, 1));
 
             // animates the tree at the beginning
@@ -247,26 +254,40 @@ namespace UniVer
 
             var body = new Body(vertices.ToArray(), constraints.ToArray());
             body.tag = Tags.Tree;
+            body.data = desc;
             world.AddBody(body);
             world.Pins(body, 0, 1);
             return body;
         }
 
-        private static Vertex Branch(List<Vertex> vertices, List<Constraint> constraints, Vertex parent, int i, int nMax, float coef, Vector2 normal, float branchLength, float theta)
+        private static Vertex Branch(List<Vertex> vertices, List<Constraint> constraints, TreeFoliageDesc desc, Vertex parent, int i, int nMax, float coef, Vector2 normal, float branchLength, float theta)
         {
             const float lineCoef = 0.7f;
 
             var particle = new Vertex(parent.position + (normal * (branchLength * coef)));
             vertices.Add(particle);
 
+            if (!(i  < nMax))
+            {
+                desc.leaves.Add(vertices.Count - 1);
+            }
+
             var dc = new SpringConstraint(parent, particle, lineCoef);
+            var distanceFromRootRatio = (float)i / nMax;
             constraints.Add(dc);
+            if (desc.branches.Count < constraints.Count)
+            {
+                for(var cIndex = desc.branches.Count; cIndex < constraints.Count; ++cIndex)
+                    desc.branches.Add(-1);
+            }
+            desc.branches[constraints.Count - 1] = distanceFromRootRatio;
+
             if (i < nMax)
             {
-                var a = Branch(vertices, constraints, particle, i + 1, nMax, coef * coef, MathUtils.Rotate(normal, new Vector2(0, 0), -theta), branchLength, theta);
-                var b = Branch(vertices, constraints, particle, i + 1, nMax, coef * coef, MathUtils.Rotate(normal, new Vector2(0, 0), theta), branchLength, theta);
+                var a = Branch(vertices, constraints, desc, particle, i + 1, nMax, coef * coef, MathUtils.Rotate(normal, new Vector2(0, 0), -theta), branchLength, theta);
+                var b = Branch(vertices, constraints, desc, particle, i + 1, nMax, coef * coef, MathUtils.Rotate(normal, new Vector2(0, 0), theta), branchLength, theta);
 
-                var jointStrength = Mathf.Lerp(0.7f, 0, (float)i / nMax);
+                var jointStrength = Mathf.Lerp(0.7f, 0, distanceFromRootRatio);
                 constraints.Add(new AngleConstraint(parent, particle, a, jointStrength));
                 constraints.Add(new AngleConstraint(parent, particle, b, jointStrength));
             }

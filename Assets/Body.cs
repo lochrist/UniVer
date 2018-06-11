@@ -38,6 +38,7 @@ namespace UniVer
         public float mass = 1.0f;
         public int tag = Tags.NormalBody;
         public int id = idPool++;
+        public object data;
 
         private static int idPool = 0;
 

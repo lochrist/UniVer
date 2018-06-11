@@ -116,12 +116,21 @@ namespace UniVer
             world.SpiderWeb(new Vector2(world.width / 2, world.height / 2), Mathf.Min(world.width, world.height) / 2, 20, 7);
         }
 
-        [Demo(true)]
+        [Demo]
         public void Tree(World world)
         {
             world.enableGravity = false;
             World.friction = 0.98f;
             world.Tree(new Vector2(world.width / 2, world.height - 120), 5, 70, 0.95f, (Mathf.PI / 2) / 3);
+        }
+
+        [Demo(true)]
+        public void TreeWithFoliage(World world)
+        {
+            world.enableGravity = false;
+            World.friction = 0.98f;
+            var tree = world.Tree(new Vector2(world.width / 2, world.height - 120), 5, 70, 0.95f, (Mathf.PI / 2) / 3);
+            tree.tag = Tags.TreeWithFoliage;
         }
         #endregion
     }

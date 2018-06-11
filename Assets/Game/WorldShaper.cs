@@ -58,6 +58,25 @@ namespace UniVer {
                     Drawing2D.DrawLine(body.vertices[0].position + DemoUtils.offset, body.vertices[1].position + DemoUtils.offset, DemoUtils.constraintColor);
                     DrawNormalBody(body);
                     break;
+                case Tags.TreeWithFoliage:
+                    var desc = body.data as Builders.TreeFoliageDesc;
+                    for (var i = 0; i < desc.branches.Count; ++i)
+                    {
+                        if (desc.branches[i] < 0)
+                            continue;
+
+                        var constraint = body.constraints[i] as SpringConstraint;
+                        var trunkWidth = Mathf.Lerp(10f, 2f, desc.branches[i]);
+                        Drawing2D.DrawLine(constraint.v0.position + DemoUtils.offset, constraint.v1.position + DemoUtils.offset, DemoUtils.trunkColor, trunkWidth);
+                    }
+
+                    for(var i = 0; i < desc.leaves.Count; ++i)
+                    {
+                        var vertex = body.vertices[desc.leaves[i]];
+                        Drawing2D.FillCircle(vertex.position + DemoUtils.offset, 25, DemoUtils.foliageColor);
+                    }
+
+                    break;
                 case Tags.NormalBody:
                 default:
                     DrawNormalBody(body);

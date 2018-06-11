@@ -8,6 +8,7 @@ public static class Tags {
     public const int SolidBody = 20;
     public const int Cloth = 30;
     public const int Tree = 40;
+    public const int TreeWithFoliage = 50;
 
     public const int DistanceConstraint = 100;
     public const int PinConstraint = 110;

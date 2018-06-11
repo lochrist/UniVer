@@ -14,6 +14,8 @@ public class DemoUtils {
     public static Color rectangleColor = ToColor(70, 70, 70);
     public static Color triangleColor = ToColor(225, 10, 10);
     public static Color dragConstraintColor = ToColor(0, 0, 220);
+    public static Color trunkColor = ToColor("#543324");
+    public static Color foliageColor = ToColor("#679d7c");
     public const float margin = 30f;
     public static Vector2 offset = new Vector2(DemoUtils.margin, DemoUtils.margin);
     public static float pinSize = 6f;
