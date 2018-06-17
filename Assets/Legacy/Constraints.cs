@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UniVer
+namespace UniVer.Legacy
 {
     public enum ConstraintTag
     {

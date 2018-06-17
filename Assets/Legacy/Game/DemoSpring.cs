@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniVer;
+using UniVer.Legacy;
 
-namespace UniVer
+namespace UniVer.Legacy
 {
     public class DemoSpring : Demo
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace UniVer
+namespace UniVer.Legacy
 {
     public class DemoCollision : Demo
     {

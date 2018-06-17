@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Experimental.AI;
 
-namespace UniVer
+namespace UniVer.Legacy
 {
     public struct RecordinInfo
     {

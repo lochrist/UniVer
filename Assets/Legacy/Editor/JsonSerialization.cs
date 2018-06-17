@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework.Internal;
 
-namespace UniVer
+namespace UniVer.Legacy
 {
     [Serializable]
     public class JsonTestData

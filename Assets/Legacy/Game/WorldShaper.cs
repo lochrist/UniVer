@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using GraphicDNA;
 
-namespace UniVer {
+namespace UniVer.Legacy {
     public class WorldShaper : WorldRenderer
     {
         private Rect mParentRect;

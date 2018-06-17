@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace UniVer
+namespace UniVer.Legacy
 {
     public class Vertex
     {

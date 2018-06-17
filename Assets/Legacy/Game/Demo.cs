@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace UniVer
+namespace UniVer.Legacy
 {
     public abstract class WorldRenderer : MonoBehaviour
     {

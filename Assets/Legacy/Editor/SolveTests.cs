@@ -6,7 +6,7 @@ using System.Xml.Schema;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace UniVer
+namespace UniVer.Legacy
 {
     public static class TestUtils {
         public static string folder = "Assets/Uniphys/Verl3t/Editor/TestData";
