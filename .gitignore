@@ -5,7 +5,9 @@
 /[Bb]uilds/
 /Assets/AssetStoreTools*
 
-Assets/3rdParty
+Assets/3rdParty/Shapes2D
+Assets/3rdParty/UltiDraw
+Assets/3rdParty/Vectrosity
 
 # Visual Studio 2015 cache directory
 /.vs/
