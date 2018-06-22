@@ -52,7 +52,7 @@ namespace UniVer.Legacy
         }
 
         #region Demos
-        [Demo]
+        [Demo(true)]
         public void CodePyramid(World world)
         {
             var rowSpacing = 4f;
@@ -65,7 +65,7 @@ namespace UniVer.Legacy
                 nbColumns -= 1;
             }
 
-            var nbRows = Mathf.Min(Mathf.FloorToInt(world.width / (blockSize + rowSpacing)), nbColumns);
+            var nbRows = Mathf.Min(Mathf.FloorToInt(world.height / (blockSize + rowSpacing)), nbColumns);
             for (var row = 0; row < nbRows; ++row)
             {
                 var x = columnSpacing + row * (columnSpacing + blockSize);
@@ -76,6 +76,8 @@ namespace UniVer.Legacy
                     x += columnSpacing + blockSize;
                 }
             }
+
+            live = false;
         }
 
         [Demo]
