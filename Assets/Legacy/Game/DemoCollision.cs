@@ -52,7 +52,7 @@ namespace UniVer.Legacy
         }
 
         #region Demos
-        [Demo(true)]
+        [Demo]
         public void CodePyramid(World world)
         {
             var rowSpacing = 4f;
@@ -76,8 +76,6 @@ namespace UniVer.Legacy
                     x += columnSpacing + blockSize;
                 }
             }
-
-            live = false;
         }
 
         [Demo]
